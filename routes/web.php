@@ -1,8 +1,6 @@
 <?php
 
 
-use App\Http\Controllers\Admin;
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\OrderController;
@@ -37,21 +35,17 @@ Route::group(['prefix' =>  'book', 'as' => 'books.'], function () {
 });
 
 Route::group(['prefix' => 'user', 'middleware' => 'auth'], function () {
-    //  /user/books/...
     Route::group(['prefix' => 'books', 'as' => 'user.books.'], function () {
-        Route::resource('books', BookController::class)->only(['index', 'update', 'edit', 'destroy']);
-        // Route::get('/', [BookController::class, 'index'])->name('list');
-        // Route::get('{book:slug}/edit', [BookController::class, 'edit'])->name('edit');
-        // Route::put('{book:slug}', [BookController::class, 'update'])->name('update');
-        // Route::delete('{book}', [BookController::class, 'destroy'])->name('destroy');
+        Route::get('/', [BookController::class, 'index'])->name('index');
+        Route::get('{book:slug}/edit', [BookController::class, 'edit'])->name('edit');
+        Route::put('{book:slug}', [BookController::class, 'update'])->name('update');
+        Route::delete('{book}', [BookController::class, 'destroy'])->name('destroy');
     });
 
-    //  /user/orders/...
     Route::group(['prefix' => 'orders'], function () {
         Route::get('/', [OrderController::class, 'index'])->name('user.orders.index');
     });
     
-    //  /user/settings/...
     Route::group(['prefix' => 'settings', 'as' => 'user.'], function () {
         Route::get('/', [UserSettingsController::class, 'index'])->name('settings');
         Route::post('{user}', [UserSettingsController::class, 'update'])->name('settings.update');
